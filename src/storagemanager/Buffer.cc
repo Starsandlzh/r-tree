@@ -27,7 +27,6 @@
 
 #include <cstring>
 
-#include <spatialindex/SpatialIndex.h>
 #include "Buffer.h"
 
 Buffer::Buffer(IStorageManager& sm, Tools::PropertySet& ps) :

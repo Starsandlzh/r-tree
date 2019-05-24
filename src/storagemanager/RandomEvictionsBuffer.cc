@@ -28,11 +28,6 @@
 #include <cstdlib>
 #include <cmath>
 
-#ifndef HAVE_SRAND48
-#include <spatialindex/tools/rand48.h>
-#endif
-
-#include <spatialindex/SpatialIndex.h>
 #include "RandomEvictionsBuffer.h"
 
 using namespace SpatialIndex;

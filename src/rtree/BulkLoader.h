@@ -29,6 +29,10 @@
 
 #include <memory>
 
+#include "../spatialindex/SpatialIndex.h"
+#include "../tools/Tools.h"
+#include "RTree.h"
+
 namespace SpatialIndex
 {
 	namespace RTree

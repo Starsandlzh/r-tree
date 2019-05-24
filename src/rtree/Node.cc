@@ -29,9 +29,6 @@
 #include <cmath>
 #include <limits>
 
-#include <spatialindex/SpatialIndex.h>
-
-#include "RTree.h"
 #include "Node.h"
 #include "Index.h"
 

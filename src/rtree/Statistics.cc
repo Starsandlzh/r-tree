@@ -25,8 +25,6 @@
  * DEALINGS IN THE SOFTWARE.
 ******************************************************************************/
 
-#include <spatialindex/SpatialIndex.h>
-
 #include "Statistics.h"
 
 using namespace SpatialIndex::RTree;

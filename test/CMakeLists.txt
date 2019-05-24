@@ -1,4 +1,4 @@
-include_directories(../include)
+include_directories(../src)
 
 set (DIR rtree)
 set (SOURCES

@@ -26,9 +26,7 @@
  * DEALINGS IN THE SOFTWARE.
 ******************************************************************************/
 
-#include <vector>
-#include "spatialindex/IdVisitor.h"
-#include "spatialindex/SpatialIndex.h"
+#include "IdVisitor.h"
 
 IdVisitor::IdVisitor(): nResults(0)
 {

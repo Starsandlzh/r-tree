@@ -4,7 +4,8 @@
 # (based originally on the libLAS files copyright Mateusz Loskot)
 
 cmake_minimum_required(VERSION 2.8.4)
-project(spatialindex)
+project(r-tree)
+set(CMAKE_CXX_STANDARD 11)
 
 #------------------------------------------------------------------------------
 # internal cmake settings
@@ -46,17 +47,6 @@ option(SIDX_BUILD_TESTS "Enables integrated test suites" ON)
 # Name of C++ library
 
 set(SIDX_LIB_NAME spatialindex)
-
-if(WIN32)
-  if (MSVC)
-	if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-		set( SIDX_LIB_NAME "spatialindex-64" )
-	else( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-		set( SIDX_LIB_NAME "spatialindex-32"  )
-	endif( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-  endif()
-endif()
-
 
 set(CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE ON)
 

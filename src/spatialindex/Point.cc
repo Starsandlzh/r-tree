@@ -29,7 +29,7 @@
 #include <cmath>
 #include <limits>
 
-#include <spatialindex/SpatialIndex.h>
+#include "Point.h"
 
 using namespace SpatialIndex;
 

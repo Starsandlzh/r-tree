@@ -29,8 +29,6 @@
 #include <cmath>
 #include <limits>
 
-#include <spatialindex/SpatialIndex.h>
-#include <spatialindex/IdVisitor.h>
 #include "Node.h"
 #include "Leaf.h"
 #include "Index.h"

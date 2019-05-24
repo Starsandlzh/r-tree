@@ -28,7 +28,6 @@
 #include <stdexcept>
 #include <cstring>
 
-#include <spatialindex/SpatialIndex.h>
 #include "MemoryStorageManager.h"
 
 using namespace SpatialIndex;

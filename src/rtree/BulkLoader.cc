@@ -33,9 +33,6 @@
 #include <unistd.h>
 #endif
 
-#include <spatialindex/SpatialIndex.h>
-
-#include "RTree.h"
 #include "Leaf.h"
 #include "Index.h"
 #include "BulkLoader.h"

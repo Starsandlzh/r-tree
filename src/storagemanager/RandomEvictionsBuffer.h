@@ -29,6 +29,12 @@
 
 #include "Buffer.h"
 
+#ifndef HAVE_SRAND48
+#include "../tools/rand48.h"
+#endif
+
+#include "../spatialindex/SpatialIndex.h"
+
 namespace SpatialIndex
 {
 	namespace StorageManager

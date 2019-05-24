@@ -27,6 +27,7 @@
 
 #include <fstream>
 #include <cstring>
+#include "DiskStorageManager.h"
 
 // For checking if a file exists - hobu
 #include <sys/stat.h>
@@ -35,9 +36,6 @@
 #define stat _stat64
 #endif
 
-#include <spatialindex/SpatialIndex.h>
-#include "DiskStorageManager.h"
-#include <spatialindex/tools/Tools.h>
 
 using namespace SpatialIndex;
 using namespace SpatialIndex::StorageManager;

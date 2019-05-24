@@ -27,25 +27,31 @@
 
 #pragma once
 
-#include "tools/Tools.h"
+#include "../tools/Tools.h"
 
 namespace SpatialIndex
 {
-	class SIDX_DLL Point : public Tools::IObject, public virtual IShape
+	class Point;
+	class IShape;
+	class LineSegment;
+	class Region;
+
+	class LineSegment : public Tools::IObject, public virtual IShape
 	{
 	public:
-		Point();
-		Point(const double* pCoords, uint32_t dimension);
-		Point(const Point& p);
-		~Point() override;
+		LineSegment();
+		LineSegment(const double* startPoint, const double* endPoint, uint32_t dimension);
+		LineSegment(const Point& startPoint, const Point& endPoint);
+		LineSegment(const LineSegment& l);
+		~LineSegment() override;
 
-		virtual Point& operator=(const Point& p);
-		virtual bool operator==(const Point& p) const;
+		virtual LineSegment& operator=(const LineSegment& p);
+		virtual bool operator==(const LineSegment& p) const;
 
 		//
 		// IObject interface
 		//
-		Point* clone() override;
+		LineSegment* clone() override;
 
 		//
 		// ISerializable interface
@@ -66,22 +72,37 @@ namespace SpatialIndex
 		double getArea() const override;
 		double getMinimumDistance(const IShape& in) const override;
 
+		virtual bool intersectsLineSegment(const LineSegment& l) const;
+		virtual bool intersectsRegion(const Region& p) const;
 		virtual double getMinimumDistance(const Point& p) const;
-
-		virtual double getCoordinate(uint32_t index) const;
+		//virtual double getMinimumDistance(const Region& r) const;
+		virtual double getRelativeMinimumDistance(const Point& p) const;
+		virtual double getRelativeMaximumDistance(const Region& r) const;
+		virtual double getAngleOfPerpendicularRay();
 
 		virtual void makeInfinite(uint32_t dimension);
 		virtual void makeDimension(uint32_t dimension);
-
+        
 	public:
 		uint32_t m_dimension{0};
-		double* m_pCoords{nullptr};
+		double* m_pStartPoint{nullptr};
+		double* m_pEndPoint{nullptr};
 
-		friend class Region;
-		friend SIDX_DLL std::ostream& operator<<(std::ostream& os, const Point& pt);
-	}; // Point
-	
-	typedef Tools::PoolPointer<Point> PointPtr;
+		friend std::ostream& operator<<(std::ostream& os, const LineSegment& pt);
 
-	SIDX_DLL std::ostream& operator<<(std::ostream& os, const Point& pt);
+    protected:
+
+        //some helpers for intersects methods
+        static double doubleAreaTriangle(const Point& a, const Point& b, const Point& c); 
+        static bool leftOf(const Point& a, const Point& b, const Point& c); 
+        static bool collinear(const Point& a, const Point& b, const Point& c); 
+        static bool between(const Point& a, const Point& b, const Point& c); 
+        static bool between(double a, double b, double c); 
+        static bool intersectsProper(const Point& a, const Point& b, const Point& c, const Point& d); 
+        static bool intersects(const Point& a, const Point& b, const Point& c, const Point& d); 
+
+	}; // LineSegment
+
+	std::ostream& operator<<(std::ostream& os, const LineSegment& pt);
 }
+

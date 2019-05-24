@@ -27,15 +27,42 @@
 
 #pragma once
 
+#include <memory>
+
+#include "../spatialindex/SpatialIndex.h"
+#include "../spatialindex/IdVisitor.h"
 #include "Statistics.h"
 #include "Node.h"
 #include "PointerPoolNode.h"
-#include <memory>
 
 namespace SpatialIndex
 {
 	namespace RTree
 	{
+			enum RTreeVariant
+			{
+					RV_LINEAR = 0x0,
+					RV_QUADRATIC,
+					RV_RSTAR
+			};
+
+			enum BulkLoadMethod
+			{
+					BLM_STR = 0x0
+			};
+
+			enum PersistenObjectIdentifier
+			{
+					PersistentIndex = 0x1,
+					PersistentLeaf = 0x2
+			};
+
+			enum RangeQueryType
+			{
+					ContainmentQuery = 0x1,
+					IntersectionQuery = 0x2
+			};
+
 		class RTree : public ISpatialIndex
 		{
                   //class NNEntry;
@@ -137,10 +164,10 @@ namespace SpatialIndex
 
 			bool m_bTightMBRs;
 
-			Tools::PointerPool<Point> m_pointPool;
-			Tools::PointerPool<Region> m_regionPool;
-			Tools::PointerPool<Node> m_indexPool;
-			Tools::PointerPool<Node> m_leafPool;
+			Tools::PointerManager<Point> m_pointPool;
+			Tools::PointerManager<Region> m_regionPool;
+			Tools::PointerManager<Node> m_indexPool;
+			Tools::PointerManager<Node> m_leafPool;
 
 			std::vector<std::shared_ptr<ICommand> > m_writeNodeCommands;
 			std::vector<std::shared_ptr<ICommand> > m_readNodeCommands;
@@ -198,5 +225,56 @@ namespace SpatialIndex
 		}; // RTree
 
 		std::ostream& operator<<(std::ostream& os, const RTree& t);
+
+			class Data : public IData, public Tools::ISerializable
+			{
+			public:
+					Data(uint32_t len, uint8_t* pData, Region& r, id_type id);
+					~Data() override;
+
+					Data* clone() override;
+					id_type getIdentifier() const override;
+					void getShape(IShape** out) const override;
+					void getData(uint32_t& len, uint8_t** data) const override;
+					uint32_t getByteArraySize() override;
+					void loadFromByteArray(const uint8_t* data) override;
+					void storeToByteArray(uint8_t** data, uint32_t& len) override;
+
+					id_type m_id;
+					Region m_region;
+					uint8_t* m_pData;
+					uint32_t m_dataLength;
+			}; // Data
+
+			ISpatialIndex* returnRTree(IStorageManager& ind, Tools::PropertySet& in);
+			ISpatialIndex* createNewRTree(
+							IStorageManager& sm,
+							double fillFactor,
+							uint32_t indexCapacity,
+							uint32_t leafCapacity,
+							uint32_t dimension,
+							RTreeVariant rv,
+							id_type& indexIdentifier
+			);
+			ISpatialIndex* createAndBulkLoadNewRTree(
+							BulkLoadMethod m,
+							IDataStream& stream,
+							IStorageManager& sm,
+							double fillFactor,
+							uint32_t indexCapacity,
+							uint32_t leafCapacity,
+							uint32_t dimension,
+							RTreeVariant rv,
+							id_type& indexIdentifier
+			);
+			ISpatialIndex* createAndBulkLoadNewRTree(
+							BulkLoadMethod m,
+							IDataStream& stream,
+							IStorageManager& sm,
+							Tools::PropertySet& ps,
+							id_type& indexIdentifier
+			);
+			ISpatialIndex* loadRTree(IStorageManager& in, id_type indexIdentifier);
+	}
 	}
 }

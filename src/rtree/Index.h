@@ -30,6 +30,9 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcast-qual"
 
+#include "../spatialindex/SpatialIndex.h"
+#include "RTree.h"
+
 namespace SpatialIndex
 {
 	namespace RTree

@@ -25,11 +25,11 @@
  * DEALINGS IN THE SOFTWARE.
 ******************************************************************************/
 
-#include <spatialindex/SpatialIndex.h>
-
 #include <cstring>
 #include <cmath>
 #include <limits>
+
+#include "Region.h"
 
 using namespace SpatialIndex;
 

@@ -25,18 +25,17 @@
  * DEALINGS IN THE SOFTWARE.
 ******************************************************************************/
 
-#ifndef __spatialindex_rtree_pointer_pool_node_h
-#define __spatialindex_rtree_pointer_pool_node_h
+#pragma once
 
 #include "Node.h"
 
 namespace Tools
 {
 	using namespace SpatialIndex;
-	template<> class PointerPool<RTree::Node>
+	template<> class PointerManager<RTree::Node>
 	{
 	public:
-		explicit PointerPool(uint32_t capacity) : m_capacity(capacity)
+		explicit PointerManager(uint32_t capacity) : m_capacity(capacity)
 		{
 			#ifndef NDEBUG
 			m_hits = 0;
@@ -45,7 +44,7 @@ namespace Tools
 			#endif
 		}
 
-		~PointerPool()
+		~PointerManager()
 		{
 			assert(m_pool.size() <= m_capacity);
 
@@ -141,5 +140,3 @@ namespace Tools
 	#endif
 	};
 }
-
-#endif /* __spatialindex_rtree_pointer_pool_node_h */

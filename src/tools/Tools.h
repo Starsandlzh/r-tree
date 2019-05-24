@@ -27,7 +27,6 @@
 
 #pragma once
 
-
 #if (defined _WIN32 || defined _WIN64 || defined WIN32 || defined WIN64) && (defined _MSC_VER) && (_MSC_VER < 1900) && !defined __GNUC__
   typedef __int8 int8_t;
   typedef __int16 int16_t;
@@ -40,20 +39,6 @@
 
 #else
   #include <cstdint>
-#endif
-
-#if (defined _WIN32 || defined _WIN64 || defined WIN32 || defined WIN64) && !defined __GNUC__
-  #ifdef SIDX_DLL_EXPORT
-    #define SIDX_DLL __declspec(dllexport)
-  #else
-    #define SIDX_DLL __declspec(dllimport)
-  #endif
-
-  // Nuke this annoying warning.  See http://www.unknownroad.com/rtfm/VisualStudio/warningC4251.html
-#pragma warning( disable: 4251 )
-
-#else
-  #define SIDX_DLL
 #endif
 
 #include <cassert>
@@ -71,9 +56,6 @@
 #include <list>
 #include <algorithm>
 #include <cwchar>
-
-#include "PointerPool.h"
-#include "PoolPointer.h"
 
 namespace Tools
 {
@@ -103,7 +85,7 @@ namespace Tools
 		VT_EMPTY,
 		VT_LONGLONG,
 		VT_ULONGLONG,
-        VT_PWCHAR
+		VT_PWCHAR
     };
 
 	enum FileMode
@@ -115,14 +97,14 @@ namespace Tools
 	//
 	// Exceptions
 	//
-	class SIDX_DLL Exception
+	class Exception
 	{
 	public:
 		virtual std::string what() = 0;
 		virtual ~Exception() = default;
 	};
 
-	class SIDX_DLL IndexOutOfBoundsException : public Exception
+	class IndexOutOfBoundsException : public Exception
 	{
 	public:
 		IndexOutOfBoundsException(size_t i);
@@ -133,7 +115,7 @@ namespace Tools
 		std::string m_error;
 	}; // IndexOutOfBoundsException
 
-	class SIDX_DLL IllegalArgumentException : public Exception
+	class IllegalArgumentException : public Exception
 	{
 	public:
 		IllegalArgumentException(std::string s);
@@ -144,7 +126,7 @@ namespace Tools
 		std::string m_error;
 	}; // IllegalArgumentException
 
-	class SIDX_DLL IllegalStateException : public Exception
+	class IllegalStateException : public Exception
 	{
 	public:
 		IllegalStateException(std::string s);
@@ -155,7 +137,7 @@ namespace Tools
 		std::string m_error;
 	}; // IllegalStateException
 
-	class SIDX_DLL EndOfStreamException : public Exception
+	class EndOfStreamException : public Exception
 	{
 	public:
 		EndOfStreamException(std::string s);
@@ -166,7 +148,7 @@ namespace Tools
 		std::string m_error;
 	}; // EndOfStreamException
 
-	class SIDX_DLL ResourceLockedException : public Exception
+	class ResourceLockedException : public Exception
 	{
 	public:
 		ResourceLockedException(std::string s);
@@ -177,7 +159,7 @@ namespace Tools
 		std::string m_error;
 	}; // ResourceLockedException
 
-	class SIDX_DLL NotSupportedException : public Exception
+	class NotSupportedException : public Exception
 	{
 	public:
 		NotSupportedException(std::string s);
@@ -191,7 +173,7 @@ namespace Tools
 	//
 	// Interfaces
 	//
-	class SIDX_DLL IInterval
+	class IInterval
 	{
 	public:
 		virtual ~IInterval() = default;
@@ -205,7 +187,7 @@ namespace Tools
 		virtual IntervalType getIntervalType() const = 0;
 	}; // IInterval
 
-	class SIDX_DLL IObject
+	class IObject
 	{
 	public:
 		virtual ~IObject() = default;
@@ -215,7 +197,7 @@ namespace Tools
 			// IMPORTANT: do not return the this pointer!
 	}; // IObject
 
-	class SIDX_DLL ISerializable
+	class ISerializable
 	{
 	public:
 		virtual ~ISerializable() = default;
@@ -228,7 +210,7 @@ namespace Tools
 			// store this object in the uint8_t array.
 	};
 
-	class SIDX_DLL IComparable
+	class IComparable
 	{
 	public:
 		virtual ~IComparable() = default;
@@ -238,7 +220,7 @@ namespace Tools
 		virtual bool operator==(const IComparable& o) const = 0;
 	}; //IComparable
 
-	class SIDX_DLL IObjectComparator
+	class IObjectComparator
 	{
 	public:
 		virtual ~IObjectComparator() = default;
@@ -246,7 +228,7 @@ namespace Tools
 		virtual int compare(IObject* o1, IObject* o2) = 0;
 	}; // IObjectComparator
 
-	class SIDX_DLL IObjectStream
+	class IObjectStream
 	{
 	public:
 		virtual ~IObjectStream() = default;
@@ -269,7 +251,7 @@ namespace Tools
 	// Classes & Functions
 	//
 
-	class SIDX_DLL Variant
+	class Variant
 	{
 	public:
 		Variant();
@@ -295,10 +277,10 @@ namespace Tools
 		} m_val;
 	}; // Variant
 
-	class SIDX_DLL PropertySet;
-	SIDX_DLL std::ostream& operator<<(std::ostream& os, const Tools::PropertySet& p);
+	class PropertySet;
+	std::ostream& operator<<(std::ostream& os, const Tools::PropertySet& p);
 
-	class SIDX_DLL PropertySet : public ISerializable
+	class PropertySet : public ISerializable
 	{
 	public:
 		PropertySet();
@@ -320,11 +302,11 @@ namespace Tools
 // #else
 //             bool m_rwLock;
 // #endif
-		friend SIDX_DLL std::ostream& Tools::operator<<(std::ostream& os, const Tools::PropertySet& p);
+		friend std::ostream& Tools::operator<<(std::ostream& os, const Tools::PropertySet& p);
 	}; // PropertySet
 
 	// does not support degenerate intervals.
-	class SIDX_DLL Interval : public IInterval
+	class Interval : public IInterval
 	{
 	public:
 		Interval();
@@ -349,9 +331,9 @@ namespace Tools
 		double m_high{0.0};
 	}; // Interval
 
-	SIDX_DLL std::ostream& operator<<(std::ostream& os, const Tools::Interval& iv);
+	std::ostream& operator<<(std::ostream& os, const Tools::Interval& iv);
 
-	class SIDX_DLL Random
+	class Random
 	{
 	public:
 		Random();
@@ -392,7 +374,7 @@ namespace Tools
 	}; // Random
 
 	#if HAVE_PTHREAD_H
-	class SIDX_DLL LockGuard
+	class LockGuard
 	{
 	public:
 		LockGuard(pthread_mutex_t* pLock);
@@ -403,7 +385,7 @@ namespace Tools
 	}; // LockGuard
 	#endif
 
-	class SIDX_DLL BufferedFile
+	class BufferedFile
 	{
 	public:
 		BufferedFile(uint32_t u32BufferSize = 16384);
@@ -421,7 +403,7 @@ namespace Tools
 		bool m_bEOF{true};
 	};
 
-	class SIDX_DLL BufferedFileReader : public BufferedFile
+	class BufferedFileReader : public BufferedFile
 	{
 	public:
 		BufferedFileReader();
@@ -443,7 +425,7 @@ namespace Tools
 		virtual void readBytes(uint32_t u32Len, uint8_t** pData);
 	};
 
-	class SIDX_DLL BufferedFileWriter : public BufferedFile
+	class BufferedFileWriter : public BufferedFile
 	{
 	public:
 		BufferedFileWriter();
@@ -465,7 +447,7 @@ namespace Tools
 		virtual void write(uint32_t u32Len, uint8_t* pData);
 	};
 
-	class SIDX_DLL TemporaryFile
+	class TemporaryFile
 	{
 	public:
 		TemporaryFile();

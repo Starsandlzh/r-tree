@@ -27,24 +27,26 @@
 
 #pragma once
 
+#include "SpatialIndex.h"
+#include "../tools/PointerManager.h"
+
 namespace SpatialIndex
 {
-	class SIDX_DLL Region : public Tools::IObject, public virtual IShape
+	class Point : public Tools::IObject, public virtual IShape
 	{
 	public:
-		Region();
-		Region(const double* pLow, const double* pHigh, uint32_t dimension);
-		Region(const Point& low, const Point& high);
-		Region(const Region& in);
-		~Region() override;
+		Point();
+		Point(const double* pCoords, uint32_t dimension);
+		Point(const Point& p);
+		~Point() override;
 
-		virtual Region& operator=(const Region& r);
-		virtual bool operator==(const Region&) const;
+		virtual Point& operator=(const Point& p);
+		virtual bool operator==(const Point& p) const;
 
 		//
 		// IObject interface
 		//
-		Region* clone() override;
+		Point* clone() override;
 
 		//
 		// ISerializable interface
@@ -65,42 +67,22 @@ namespace SpatialIndex
 		double getArea() const override;
 		double getMinimumDistance(const IShape& in) const override;
 
-		virtual bool intersectsRegion(const Region& in) const;
-		virtual bool containsRegion(const Region& in) const;
-		virtual bool touchesRegion(const Region& in) const;
-		virtual double getMinimumDistance(const Region& in) const;
+		virtual double getMinimumDistance(const Point& p) const;
 
-		virtual bool intersectsLineSegment(const LineSegment& in) const;
-
-		virtual bool containsPoint(const Point& in) const;
-		virtual bool touchesPoint(const Point& in) const;
-		virtual double getMinimumDistance(const Point& in) const;
-
-		virtual Region getIntersectingRegion(const Region& r) const;
-		virtual double getIntersectingArea(const Region& in) const;
-		virtual double getMargin() const;
-
-		virtual void combineRegion(const Region& in);
-		virtual void combinePoint(const Point& in);
-		virtual void getCombinedRegion(Region& out, const Region& in) const;
-
-		virtual double getLow(uint32_t index) const;
-		virtual double getHigh(uint32_t index) const;
+		virtual double getCoordinate(uint32_t index) const;
 
 		virtual void makeInfinite(uint32_t dimension);
 		virtual void makeDimension(uint32_t dimension);
 
-	private:
-		void initialize(const double* pLow, const double* pHigh, uint32_t dimension);
-
 	public:
 		uint32_t m_dimension{0};
-		double* m_pLow{nullptr};
-		double* m_pHigh{nullptr};
+		double* m_pCoords{nullptr};
 
-		friend SIDX_DLL std::ostream& operator<<(std::ostream& os, const Region& r);
-	}; // Region
+		friend class Region;
+		friend std::ostream& operator<<(std::ostream& os, const Point& pt);
+	}; // Point
 	
-	typedef Tools::PoolPointer<Region> RegionPtr;
-	SIDX_DLL std::ostream& operator<<(std::ostream& os, const Region& r);
+	typedef Tools::PoolPointer<Point> PointPtr;
+
+	std::ostream& operator<<(std::ostream& os, const Point& pt);
 }

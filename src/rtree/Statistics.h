@@ -27,6 +27,8 @@
 
 #pragma once
 
+#include "../spatialindex/SpatialIndex.h"
+
 namespace SpatialIndex
 {
 	namespace RTree

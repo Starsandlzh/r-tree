@@ -27,11 +27,8 @@
 
 #include <ctime>
 #include <limits>
-#include <spatialindex/tools/Tools.h>
-
-#ifndef HAVE_SRAND48
-#include <spatialindex/tools/rand48.h>
-#endif
+#include "Tools.h"
+#include "rand48.h"
 
 #include <cstring>
 

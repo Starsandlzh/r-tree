@@ -1,8 +1,9 @@
 /******************************************************************************
- * Project:  libspatialindex - A C++ library for spatial indexing
- * Author:   Marios Hadjieleftheriou, mhadji@gmail.com
+ * Project:  libsidx - A C API wrapper around libspatialindex
+ * Purpose:	 C++ object declarations to implement a query ids only.
+ * Author:   Howard Butler, hobu.inc@gmail.com
  ******************************************************************************
- * Copyright (c) 2002, Marios Hadjieleftheriou
+ * Copyright (c) 2009, Howard Butler
  *
  * All rights reserved.
  * 
@@ -24,45 +25,26 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
 ******************************************************************************/
-#include <spatialindex/SpatialIndex.h>
 
-#include "../rtree/RTree.h"
+#pragma once
 
-SpatialIndex::InvalidPageException::InvalidPageException(id_type id)
+#include "SpatialIndex.h"
+
+class IdVisitor : public SpatialIndex::IVisitor
 {
-	std::ostringstream s;
-	s << "Unknown page id " << id;
-	m_error = s.str();
-}
+private:
+    std::vector<uint64_t> m_vector;
+    uint64_t nResults;
 
-std::string SpatialIndex::InvalidPageException::what()
-{
-	return "InvalidPageException: " + m_error;
-}
+public:
 
-std::ostream& SpatialIndex::operator<<(std::ostream& os, const ISpatialIndex& i)
-{
-	const SpatialIndex::RTree::RTree* pRTree = dynamic_cast<const SpatialIndex::RTree::RTree*>(&i);
-	if (pRTree != nullptr)
-	{
-		os << *pRTree;
-		return os;
-	}
+    IdVisitor();
+    ~IdVisitor();
 
-	std::cerr << "ISpatialIndex operator<<: Not implemented yet for this index type." << std::endl;
-	return os;
-}
-
-std::ostream& SpatialIndex::operator<<(std::ostream& os, const IStatistics& s)
-{
-	const SpatialIndex::RTree::Statistics* pRTreeStats = dynamic_cast<const SpatialIndex::RTree::Statistics*>(&s);
-	if (pRTreeStats != nullptr)
-	{
-		os << *pRTreeStats;
-		return os;
-	}
-
-	std::cerr << "IStatistics operator<<: Not implemented yet for this index type." << std::endl;
-	return os;
-}
-
+    uint64_t GetResultCount() const { return nResults; }
+    std::vector<uint64_t>& GetResults()  { return m_vector; }
+    
+    void visitNode(const SpatialIndex::INode& n);
+    void visitData(const SpatialIndex::IData& d);
+    void visitData(std::vector<const SpatialIndex::IData*>& v);
+};

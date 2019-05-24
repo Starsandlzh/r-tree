@@ -27,9 +27,6 @@
 
 #include <cstring>
 
-#include <spatialindex/SpatialIndex.h>
-
-#include "RTree.h"
 #include "Node.h"
 #include "Index.h"
 #include "Leaf.h"
